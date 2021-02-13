@@ -1,0 +1,5 @@
+{
+    "port": 8080,
+    "secret": "***",
+    "database": "mongodb+srv://user:password@cluster.mongodb.net/test?retryWrites=true&w=majority"
+}

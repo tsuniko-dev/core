@@ -1,0 +1,13 @@
+{
+    "name": "tsuniko-server-core",
+    "description": "Ядро сокет-сервера Tsuniko",
+    "author": "tsuniko-dev",
+    "version": "1.0.0",
+    "license": "MIT",
+    "main": "src/core.js",
+    "dependencies": {
+        "mongoose": "^5.11.15",
+        "socket.io": "^3.1.1",
+        "socket.io-client": "^3.1.1"
+    }
+}
