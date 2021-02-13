@@ -124,6 +124,16 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on('message', (data) => {
+        let { message, secret } = data;
+        if(!message || !secret) return;
+        if(secret !== config.secret) return socket.emit('notifications', { type: "message", success: false, data: [], errors: ['Incorrect secret key'] });
+
+        if(!io.joined.find(user => user._id == socket.id)) return socket.emit('notifications', { type: "message", success: false, data: [], errors: ['You not authorized'] });
+        io.emit('messages', { login: io.joined.find(user => user._id == socket.id).login, message });
+        return socket.emit('notifications', { type: "message", success: true, data: [], errors: [] });
+    });
+
     socket.on('session', (data) => {
         let { secret } = data;
         if(!secret) return;
