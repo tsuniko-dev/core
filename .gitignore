@@ -3,3 +3,4 @@ package-lock.json
 src/config.json
 yarn.lock
 test.js
+test2.js

@@ -1,8 +1,7 @@
 const secret = "***";
-const crypto = require('crypto');
-const cipher = crypto.createCipher('aes192', secret);
-const decipher = crypto.createDecipher('aes192', secret);
+const messageSecret = "***";
 
+const crypto = require('crypto');
 const io = require('socket.io-client')('ws://localhost:8080', {
     allowEIO3: true,
     auth: { secret }
@@ -20,8 +19,11 @@ io.on("connect", async () => {
     );
 
     io.on('messages', (data) => {
-        data.message = decipher.update(data.message, 'hex', 'utf8') + decipher.final('utf8');
-        return console.info(`NEW MESSAGE | [${data.login}] ${data.message}`);
+        try {
+            let decipher = crypto.createDecipher('aes192', messageSecret);
+            data.message = decipher.update(data.message, 'hex', 'utf8') + decipher.final('utf8');
+            return console.info(`NEW MESSAGE | [${data.login}] ${data.message}`);
+        } catch (e) {}
     });
 
     io.emit('login', {
@@ -29,8 +31,13 @@ io.on("connect", async () => {
         password: "***", secret
     });
 
-    setTimeout(() => {
-        let message = cipher.update("test message! maybe..", 'utf8', 'hex') + cipher.final('hex');
+    function sendMessage(text) {
+        let cipher = crypto.createCipher('aes192', messageSecret);
+        let message = cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
         io.emit('message', { message, secret });
+    }
+
+    setTimeout(() => {
+        sendMessage('test message! maybe..');
     }, 2000);
 });
