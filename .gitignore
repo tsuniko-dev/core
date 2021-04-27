@@ -1,6 +1,15 @@
+# Folders
 node_modules/
-package-lock.json
+
+# Files
+src/ssl/device.crt
+src/ssl/device.key
 src/config.json
+
+# Package Lock
+package-lock.json
 yarn.lock
+
+# Test files
 test.js
 test2.js

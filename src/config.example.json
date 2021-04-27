@@ -1,5 +1,10 @@
 {
+    "host": "127.0.0.1",
     "port": 8080,
     "secret": "***",
-    "database": "mongodb+srv://user:password@cluster.mongodb.net/test?retryWrites=true&w=majority"
+    "database": "mongodb+srv://user:password@cluster.mongodb.net/test?retryWrites=true&w=majority",
+    "ssl": {
+        "key": "/ssl/device.key",
+        "cert": "/ssl/device.crt"
+    }
 }

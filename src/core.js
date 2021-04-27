@@ -1,8 +1,26 @@
-const config = require('./config.json');
-const socket = require('socket.io');
+const fs = require('fs');
+const https = require('https');
 const mongoose = require('mongoose');
+const express = require('express');
 
-const io = socket(process.env.PORT || config.port);
+const config = require('./config.json');
+const app = express();
+
+app.use((req, res, next) => {
+    console.log(`* [Request] ${req.ip} | ${req.path}`);
+    return next();
+});
+app.use(require('helmet')());
+app.use('/', express.static('src/public'));
+
+const server = https.createServer({
+    key: fs.readFileSync(__dirname + config.ssl.key),
+    cert: fs.readFileSync(__dirname + config.ssl.cert)
+}, app).listen(process.env.PORT || config.port, config.host, () =>
+    console.log(`* Listening requests on *:${process.env.PORT || config.port}...`)
+);
+
+const io = require('socket.io')(server);
 mongoose.connect(config.database, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => console.info("* Connected to database"));
