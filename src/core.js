@@ -10,7 +10,16 @@ app.use((req, res, next) => {
     console.log(`* [Request] ${req.ip} | ${req.path}`);
     return next();
 });
-app.use(require('helmet')());
+app.use(require('helmet')({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "cdnjs.cloudflare.com"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+        }
+    }
+}));
 app.use('/', express.static('src/public'));
 
 const server = https.createServer({
